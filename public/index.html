@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="./favicon.png"> 
+    <link rel="stylesheet" href="./style/main.css"></link>
+</head>
+<body>
+    <div id="app" style="visibility: hidden" class="column">
+        <h1>TODO</h1>
+        <p>{{selectedTab}}</p>
+
+        <TAB-SELECTOR
+            v-model:tabs="tabs"
+            v-model:selected-tab="selectedTab"
+            v-model:select-tab="selectTab"
+        ></TAB-SELECTOR>
+
+        <div>_</div>
+
+        <TODO-LIST
+            v-model:list-name="selectedTab"
+        ></TODO-LIST>
+    </div>
+
+
+    <!-- Component Templates -->
+
+    <!-- Tab Selector -->
+    <template id="component-tab-selector">
+        <p>{{selectedTab}}</p>
+        <span class="row">
+            <span v-for="(tab,  index) in tabs">
+                <template v-if="index > 0">|</template>
+                <span class="tab"
+                    v-on:click="selectTab(tab)"
+                >{{tab}}</span>
+            </span>
+        </span>
+    </template>
+
+
+    <!-- Todo List -->
+    <template id="component-todo-list">
+        <div class="tab-view column">
+            <div class="tab-header">Groceries</div>
+                <div v-for="item in items" class="card row">
+                    <span class="done-button"
+                        v-on:click="deleteItem(item)"
+                    >✓</span>
+                    <input
+                        draggable="true"
+                        v-on:dragstart="dragstart($event, item)"
+                        v-on:dragover="dragover($event, item)"
+                        v-on:dragleave="dragleave($event, item)"
+                        v-on:drop="drop($event, item)"
+                        v-on:dragend="dragend($event, item)"
+                        v-on:change="item.message = item.message.trim()"
+                        v-bind:data-text="item.message"
+                        style="border: none"
+                        type="text"
+                        v-model="item.message"
+                        v-on:keyup.enter="focusNext(item)"
+                    />
+                </div>
+                <div class="row"
+                    v-on:dragover="dragover($event, undefined)"
+                    v-on:dragleave="dragleave($event, undefined)"
+                    v-on:drop="drop($event, undefined)">
+                    <button v-on:click="addNewItem()">+</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="./src/lib/vue.dev.js"></script>
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>
