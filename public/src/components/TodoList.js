@@ -33,16 +33,6 @@ export default {
             items.value = loadItems(newListname)
         })
 
-        function focusItem(item) {
-            if (item != null) {
-                const inputs = document.querySelectorAll('.card > input')
-                const index = items.value.indexOf(item)
-                if (index !== -1 && index < inputs.length) {
-                    inputs[index].focus()
-                }
-            }
-        }
-
         let draggedItem = undefined;
         onUpdated(() => {
             saveItems()
@@ -101,16 +91,45 @@ export default {
                     items.value.splice(index, 1)
                 }
             },
+
+
+            focusItem(item) {
+                if (item != null) {
+                    const inputs = document.querySelectorAll('.card > input')
+                    const index = items.value.indexOf(item)
+                    if (index !== -1 && index < inputs.length) {
+                        inputs[index].focus()
+                    }
+                }
+            },
             focusNext: (item) => {
                 const index = items.value.indexOf(item)
                 if (index == items.value.length - 1) {
                     component.addNewItem()
                     // wait for new item to render before focussing it
                     Vue.nextTick(() => {
-                        focusItem(items.value[index+1])
+                        component.focusItem(items.value[index+1])
                     })
                 } else {
-                    focusItem(items.value[index+1])
+                    component.focusItem(items.value[index+1])
+                }
+            },
+            focusPrev: (item) => {
+                const index = items.value.indexOf(item)
+                const focusIndex = Math.max(0, index - 1)
+
+                // wait for item to potentially be deleted
+                Vue.nextTick(() => {
+                    if (items.value.length > 0) {
+                        component.focusItem(items.value[focusIndex])
+                    }
+                })
+            },
+
+            deleteIfEmpty: (event, item) => {
+                if (item.message === '') {
+                    component.focusPrev(item)
+                    component.deleteItem(item)
                 }
             },
 

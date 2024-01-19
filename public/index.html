@@ -66,6 +66,7 @@
                         v-on:change="item.message = item.message.trim()"
                         v-model="item.message"
                         v-on:keyup.enter="focusNext(item)"
+                        v-on:keyup.delete="deleteIfEmpty($event, item)"
 
                         v-bind:class="{ done: item.done }"
 
