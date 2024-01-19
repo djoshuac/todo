@@ -59,7 +59,7 @@ export default {
                 event.target.classList.remove('dragged')
                 // wait for dragged item to settle before refocussing 
                 Vue.nextTick(() => {
-                    focusItem(draggedItem)
+                    component.focusItem(draggedItem)
                     draggedItem = undefined
                 })
             },
