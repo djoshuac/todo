@@ -25,13 +25,17 @@ button {
     cursor: pointer;
     background-color: #FBE3F3;
 }
+.selected-tab {
+    cursor: pointer;
+    background-color: salmon;
+}
 .tab:hover {
     cursor: pointer;
     background-color: #500954;
     color: whitesmoke
 }
 .tab-view {
-    background-color: #FBE3F3;
+    background-color: salmon;
 }
 .column {
     display: inline-flex;
@@ -40,6 +44,10 @@ button {
 .row {
     display: inline-flex;
     flex-direction: row;
+}
+
+.done {
+    text-decoration: line-through;
 }
 
 /* Colors */
@@ -72,7 +80,7 @@ input[type=text]:focus, input[type=text] {
     border: 1px solid #500954;
     margin: 0px;
 }
-.done-button {
+.done-button, .delete-button {
     cursor: pointer;
 }
 textarea:focus, input:focus{

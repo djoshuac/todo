@@ -9,7 +9,7 @@ createApp({
         TodoList,
     },
     setup() {
-        const tabs = ref(['test', 'groceries', 'app todo'])
+        const tabs = ref(['test', 'groceries', 'app todo', 'a long tab hyh'])
         const selectedTab = ref(tabs.value[0]);
 
         return {
@@ -18,7 +18,6 @@ createApp({
             
             selectTab: (tab) => {
                 selectedTab.value = tab
-                console.log(selectedTab.value)
             },
         }
     }

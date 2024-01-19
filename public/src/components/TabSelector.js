@@ -1,15 +1,11 @@
-const { ref } = Vue
+const {} = Vue
 
 export default {
-  props: ['tabs', 'selectedTab', 'selectTab'],
+  emits: ['selectTab'],
+  props: ['tabs', 'selectedTab'],
 
-  setup(props) {
-    return {
-      tabs: props.tabs,
-      selectedTab: props.selectedTab,
-
-      selectTab: props.selectTab,
-    }
+  setup() {
+    return {}
   },
 
   template: '#component-tab-selector',

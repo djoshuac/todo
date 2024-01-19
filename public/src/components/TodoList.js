@@ -1,15 +1,37 @@
-const { ref, onUpdated } = Vue
+const { ref, onUpdated, watch } = Vue
+
+
+
 
 export default {
     props: ['listName'],
 
     setup(props) {
-        const storageKey = `items-${props.listName}`;
-        console.log(storageKey)
+        function computeStorageKey(listName) {
+            return `items-${listName}`;
+        }
 
-        const data = localStorage.getItem(storageKey) ?? '[]'
-        const items = ref(JSON.parse(data))
-        document.querySelector('#app').style.visibility = 'visible'
+        function loadItems() {
+            const data = localStorage.getItem(storageKey) ?? '[]'
+            return JSON.parse(data)
+        }
+
+        function saveItems() {
+            localStorage.setItem(storageKey, JSON.stringify(items.value))
+        }
+
+        let storageKey = computeStorageKey(props.listName)
+        const items = ref(loadItems())
+
+        watch(() => props.listName, (newListname, oldListName) => {
+            if (newListname == oldListName) {
+                return;
+            }
+
+            console.log(newListname)
+            storageKey = computeStorageKey(newListname)
+            items.value = loadItems(newListname)
+        })
 
         function focusItem(item) {
             if (item != null) {
@@ -23,7 +45,7 @@ export default {
 
         let draggedItem = undefined;
         onUpdated(() => {
-            localStorage.setItem(storageKey, JSON.stringify(items.value))
+            saveItems()
         })
 
         const component = {
@@ -64,6 +86,15 @@ export default {
                 items.value.splice(oldIndex, 1)
                 items.value.splice(newIndex, 0, draggedItem)
             },
+            markItemCompleted: (item) => {
+                const index = items.value.indexOf(item)
+                if (index != -1) {
+                    items.value.splice(index, 1, {
+                        message: item.message,
+                        done: !(item.done === true),
+                    })
+                }
+            },
             deleteItem: (item) => {
                 const index = items.value.indexOf(item)
                 if (index != -1) {
@@ -86,6 +117,7 @@ export default {
             addNewItem: () => {
                 items.value.push({
                     message: '',
+                    done: false,
                 })
             },
         }

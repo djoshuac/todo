@@ -7,20 +7,16 @@
     <link rel="stylesheet" href="./style/main.css"></link>
 </head>
 <body>
-    <div id="app" style="visibility: hidden" class="column">
+    <div id="app" class="column" v-cloak>
         <h1>TODO</h1>
-        <p>{{selectedTab}}</p>
 
         <TAB-SELECTOR
-            v-model:tabs="tabs"
-            v-model:selected-tab="selectedTab"
-            v-model:select-tab="selectTab"
+            v-bind:tabs="tabs"
+            v-bind:selected-tab="selectedTab"
+            v-on:select-tab="(tab) => selectTab(tab)"
         ></TAB-SELECTOR>
-
-        <div>_</div>
-
         <TODO-LIST
-            v-model:list-name="selectedTab"
+            v-bind:list-name="selectedTab"
         ></TODO-LIST>
     </div>
 
@@ -29,12 +25,13 @@
 
     <!-- Tab Selector -->
     <template id="component-tab-selector">
-        <p>{{selectedTab}}</p>
         <span class="row">
             <span v-for="(tab,  index) in tabs">
                 <template v-if="index > 0">|</template>
-                <span class="tab"
-                    v-on:click="selectTab(tab)"
+                <span
+                    class="tab"
+                    v-bind:class="{ 'selected-tab': selectedTab === tab }"
+                    v-on:click="$emit('selectTab', tab)"
                 >{{tab}}</span>
             </span>
         </span>
@@ -44,24 +41,37 @@
     <!-- Todo List -->
     <template id="component-todo-list">
         <div class="tab-view column">
-            <div class="tab-header">Groceries</div>
+            <div class="tab-header"><strong>{{listName}}</strong></div>
                 <div v-for="item in items" class="card row">
-                    <span class="done-button"
-                        v-on:click="deleteItem(item)"
+                    <span
+                        class="done-button"
+                        v-bind:class="{ done: item.done }"
+
+                        v-on:click="markItemCompleted(item)"
                     >✓</span>
+                    <span
+                        v-if="item.done"
+                        class="delete-button"
+                        v-bind:class="{ done: item.done }"
+
+                        v-on:click="deleteItem(item)"
+                    >✗</span>
+
                     <input
-                        draggable="true"
                         v-on:dragstart="dragstart($event, item)"
                         v-on:dragover="dragover($event, item)"
                         v-on:dragleave="dragleave($event, item)"
                         v-on:drop="drop($event, item)"
                         v-on:dragend="dragend($event, item)"
                         v-on:change="item.message = item.message.trim()"
-                        v-bind:data-text="item.message"
-                        style="border: none"
-                        type="text"
                         v-model="item.message"
                         v-on:keyup.enter="focusNext(item)"
+
+                        v-bind:class="{ done: item.done }"
+
+                        draggable="true"
+                        style="border: none"
+                        type="text"
                     />
                 </div>
                 <div class="row"
