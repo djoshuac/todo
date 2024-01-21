@@ -27,7 +27,7 @@ button {
 }
 .selected-tab {
     cursor: pointer;
-    background-color: salmon;
+    background-color: #D08994;
 }
 .tab:hover {
     cursor: pointer;
@@ -35,7 +35,7 @@ button {
     color: whitesmoke
 }
 .tab-view {
-    background-color: salmon;
+    background-color: #D08994;
 }
 .column {
     display: inline-flex;
@@ -68,7 +68,7 @@ input[type=text]:focus, input[type=text] {
 }
 ::selection, ::-moz-selection {
     color: whitesmoke;
-    background: lightcoral;
+    background: salmon;
 }
 
 .card {
@@ -83,7 +83,7 @@ input[type=text]:focus, input[type=text] {
 .done-button, .delete-button {
     cursor: pointer;
 }
-textarea:focus, input:focus{
+input:focus{
     outline: none;
     background-color: none;
     background: transparent;

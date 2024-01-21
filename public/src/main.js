@@ -9,7 +9,7 @@ createApp({
         TodoList,
     },
     setup() {
-        const tabs = ref(['test', 'groceries', 'app todo', 'a long tab hyh'])
+        const tabs = ref(['groceries', 'app todo'])
         const selectedTab = ref(tabs.value[0]);
 
         return {
